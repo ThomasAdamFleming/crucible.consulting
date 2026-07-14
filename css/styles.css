@@ -547,6 +547,39 @@ strong { color: var(--cast); font-weight: 600; }
 /* Engagement card with index */
 .card--engagement h3 { font-size: var(--fs-h3); }
 
+/* Figures: graded photography */
+.figure { margin: 0; }
+.figure__frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: var(--graphite);
+}
+.figure__frame img {
+  width: 100%;
+  height: auto;
+  transition: transform var(--dur-slow) var(--ease-out),
+              filter var(--dur-slow) var(--ease-out);
+}
+/* Heat line: draws along the lower edge on hover or focus */
+.figure__frame::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--molten-flow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+.figure:hover .figure__frame::after,
+.figure:focus-within .figure__frame::after { transform: scaleX(1); }
+.figure:hover .figure__frame img,
+.figure:focus-within .figure__frame img { transform: scale(1.02); filter: brightness(1.05); }
+.figure__cap { margin-top: var(--sp-3); }
+.figure--portrait { width: 100%; max-width: 360px; justify-self: end; }
+
 /* 10 — Lists, credibility, steps ---------------------------- */
 .feature-list { list-style: none; padding: 0; display: grid; gap: var(--sp-5); }
 .feature-list li { position: relative; padding-left: 1.8rem; }
@@ -890,6 +923,7 @@ strong { color: var(--cast); font-weight: 600; }
 
 @media (max-width: 620px) {
   .grid--2, .grid--3, .grid--4 { grid-template-columns: 1fr; }
+  .figure--portrait { justify-self: start; }
   .facts { grid-template-columns: 1fr; }
   .facts li { padding-right: 0; }
   .footer__top { grid-template-columns: 1fr; gap: var(--sp-6); }
