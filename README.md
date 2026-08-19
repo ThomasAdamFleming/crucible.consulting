@@ -224,17 +224,27 @@ crucible.consulting/
 
 ---
 
-## Turn on the contact form (optional)
+## The contact form
 
-The contact form on the Contact page **already works** without any setup: when someone fills it in and clicks send, it opens their email program with a message to **tom@crucible.consulting** ready to go, so nothing is ever lost. The email and LinkedIn links on the page are the main way to get in touch regardless.
+The contact form on the Contact page is live. Messages are delivered by **Web3Forms** (https://web3forms.com), a free service that forwards submissions straight to **tom@crucible.consulting**. There is nothing to switch on and nothing to check: a message arrives as an email.
 
-If you would prefer messages to arrive automatically without the sender's email program opening:
+How it behaves:
 
-1. Go to https://formspree.io and create a free form. It will give you a short "form ID".
-2. Open `contact.html` in any text editor (or edit it directly on GitHub: open the file and click the pencil icon).
-3. Find the line containing `YOUR_FORM_ID` and replace just that part with your form ID. Save (or commit).
+- **Normally.** The visitor fills in the form and clicks send. The message is submitted in the background, the visitor stays on the Contact page, and a short confirmation appears under the button.
+- **If the send fails,** or if the sending service is unreachable, the page opens the visitor's email program with the message pre-filled to tom@crucible.consulting, so nothing is ever silently lost.
+- **With JavaScript turned off,** the form posts directly to Web3Forms and the visitor sees the Web3Forms confirmation page rather than a Crucible one.
 
-That is the only change needed.
+The email and LinkedIn links on the page remain the main way to get in touch regardless.
+
+### Where the settings live
+
+Everything is in `contact.html`, inside the `<form>` near the bottom of the page:
+
+- `access_key` is the Web3Forms identifier that routes messages to Tom's inbox. It is a public identifier rather than a secret (it only allows delivery to the address registered against it), which is why it is safe to have in a published file. To change the address messages go to, log in at https://web3forms.com and create a new access key, then replace the value of that line.
+- `subject` is the subject line of the email that arrives.
+- The `botcheck` checkbox is a spam trap. It is hidden from people, and bots that tick it are rejected. Leave it alone.
+
+Web3Forms' free plan covers 250 submissions a month. If the site ever outgrows that, the only change needed is a different endpoint and key in the same block.
 
 ---
 

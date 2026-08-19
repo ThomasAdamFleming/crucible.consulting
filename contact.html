@@ -123,13 +123,23 @@
 
         <div class="reveal" data-delay="1">
           <p class="eyebrow">Or send a message</p>
-          <form class="form" data-contact-form method="POST" action="https://formspree.io/f/YOUR_FORM_ID" data-mailto="tom@crucible.consulting">
+          <form class="form" data-contact-form method="POST" action="https://api.web3forms.com/submit" data-mailto="tom@crucible.consulting">
             <!--
-              To activate this form, create a free endpoint at https://formspree.io
-              and replace YOUR_FORM_ID above with your form ID.
-              Until then, submitting opens a pre-filled email to tom@crucible.consulting
-              (handled in js/main.js), so a message is never silently lost.
+              Submissions are delivered by Web3Forms (https://web3forms.com).
+              The access key below is a public identifier, not a secret: it only
+              permits delivery to the address registered against it at Web3Forms.
+              With JavaScript enabled, js/main.js posts the form in the background
+              and reports the result in .form__status. With JavaScript disabled,
+              the browser posts it normally and Web3Forms shows its own
+              confirmation page. If the request fails either way, the enhancement
+              opens a pre-filled email to tom@crucible.consulting, so a message is
+              never silently lost.
             -->
+            <input type="hidden" name="access_key" value="082cfd93-d233-435c-8e60-14c486c26cb6">
+            <input type="hidden" name="subject" value="New enquiry via crucible.consulting">
+            <input type="hidden" name="from_name" value="Crucible Consulting website">
+            <!-- Honeypot: hidden from people, often filled in by bots. -->
+            <input class="form__honeypot" type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true">
             <div class="form__row">
               <label for="name">Name</label>
               <input id="name" name="name" type="text" autocomplete="name" required>
