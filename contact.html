@@ -77,7 +77,6 @@
         <li><a class="nav__link" href="services.html">Services</a></li>
         <li><a class="nav__link" href="faq.html">FAQ</a></li>
         <li><a class="nav__link" href="contact.html" aria-current="page">Contact</a></li>
-        <li class="nav__cta"><a class="btn btn--ghost btn--sm" href="contact.html">Start a conversation</a></li>
       </ul>
     </nav>
   </div>
@@ -138,8 +137,12 @@
             <input type="hidden" name="access_key" value="082cfd93-d233-435c-8e60-14c486c26cb6">
             <input type="hidden" name="subject" value="New enquiry via crucible.consulting">
             <input type="hidden" name="from_name" value="Crucible Consulting website">
-            <!-- Honeypot: hidden from people, often filled in by bots. -->
-            <input class="form__honeypot" type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true">
+            <!--
+              Spam honeypot. It is hidden from people (the inline style keeps it
+              hidden even if the stylesheet has not loaded) and Web3Forms rejects
+              any submission where it has been ticked.
+            -->
+            <input class="form__honeypot" style="display:none" type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true">
             <div class="form__row">
               <label for="name">Name</label>
               <input id="name" name="name" type="text" autocomplete="name" required>
