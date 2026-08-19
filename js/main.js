@@ -114,27 +114,37 @@
   }
 
   /* ---- 4. Contact form -------------------------------------
-     The form's no-JS fallback posts to a form service endpoint
-     (configured in the markup). Until that endpoint is wired up,
-     this enhancement composes a pre-filled email so a submit is
-     never silently lost. If a real endpoint is set, it submits
-     normally. */
+     The form posts to a form service endpoint configured in the
+     markup (Web3Forms). With JavaScript disabled it submits
+     normally and the service shows its own confirmation page.
+     This enhancement posts it in the background instead, so the
+     visitor stays on the page and gets an inline status message.
+     If the endpoint is missing or the request fails, it composes
+     a pre-filled email, so a submit is never silently lost. */
   function initContactForm() {
     var form = document.querySelector("[data-contact-form]");
     if (!form) return;
 
     var status = form.querySelector(".form__status");
+    var button = form.querySelector("button[type='submit']");
     var endpoint = form.getAttribute("action") || "";
-    var isPlaceholder = endpoint.indexOf("YOUR_FORM_ID") !== -1 || endpoint === "";
+    var to = form.getAttribute("data-mailto") || "tom@crucible.consulting";
+    var isPlaceholder =
+      endpoint === "" || endpoint.indexOf("YOUR_FORM_ID") !== -1;
+    var canPostInBackground =
+      "fetch" in window && "FormData" in window && "Promise" in window;
 
-    form.addEventListener("submit", function (e) {
-      if (!isPlaceholder) return; // a real endpoint is configured: let it post
+    function setStatus(text, state) {
+      if (!status) return;
+      status.textContent = text;
+      status.classList.toggle("form__status--ok", state === "ok");
+      status.classList.toggle("form__status--error", state === "error");
+    }
 
-      e.preventDefault();
+    function mailtoFallback(note) {
       var name = (form.querySelector("#name") || {}).value || "";
       var email = (form.querySelector("#email") || {}).value || "";
       var message = (form.querySelector("#message") || {}).value || "";
-      var to = form.getAttribute("data-mailto") || "tom@crucible.consulting";
 
       var subject = "Enquiry via crucible.consulting";
       var body =
@@ -148,11 +158,53 @@
         "&body=" + encodeURIComponent(body);
 
       window.location.href = href;
+      setStatus(
+        (note || "Opening your email app.") +
+          " If nothing happens, write to " + to + ".",
+        "error"
+      );
+    }
 
-      if (status) {
-        status.textContent =
-          "Opening your email app. If nothing happens, write to " + to + ".";
+    form.addEventListener("submit", function (e) {
+      // No endpoint configured: compose an email instead of posting.
+      if (isPlaceholder) {
+        e.preventDefault();
+        mailtoFallback();
+        return;
       }
+
+      // Older browser: let it post normally to the endpoint.
+      if (!canPostInBackground) return;
+
+      e.preventDefault();
+      if (button) button.disabled = true;
+      setStatus("Sending your message.", null);
+
+      fetch(endpoint, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: new FormData(form)
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return { success: res.ok }; });
+        })
+        .then(function (result) {
+          if (result && result.success) {
+            form.reset();
+            setStatus(
+              "Thank you. Your message has been sent, and Tom will reply personally.",
+              "ok"
+            );
+          } else {
+            mailtoFallback("That did not send.");
+          }
+        })
+        .catch(function () {
+          mailtoFallback("That did not send.");
+        })
+        .then(function () {
+          if (button) button.disabled = false;
+        });
     });
   }
 
