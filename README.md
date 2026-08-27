@@ -156,6 +156,8 @@ The records you should end up with:
 
 > **Why the grey cloud (DNS only)?** Cloudflare can "proxy" traffic (orange cloud), but while you are first setting up, that stops GitHub from confirming the domain and giving you the padlock (HTTPS). Use the grey cloud so setup works. Once everything is live with the padlock, you may switch `www` and `@` back to the orange cloud if you want Cloudflare's caching, but if you do, also go to Cloudflare's **SSL/TLS** section and set the mode to **Full** to avoid an error loop. If in doubt, just leave them grey; the site works perfectly that way.
 
+> **If you ever switch to the orange cloud, check the bot settings.** With the grey cloud, Cloudflare only answers the "where is this site?" question and never sees a visitor. With the orange cloud, every request passes through Cloudflare, and its bot controls can block AI crawlers (ChatGPT, Claude, Perplexity and the rest) by default. That would quietly remove the site from AI search results with no visible sign anything is wrong. If you turn the orange cloud on, go to **Security → Bots** (and any "AI Scrapers and Crawlers" or "Block AI bots" toggle) and make sure search and retrieval crawlers are still allowed. The site's `robots.txt` allows them all on purpose.
+
 ---
 
 ## Part 5: Tell GitHub your domain, and turn on the padlock
