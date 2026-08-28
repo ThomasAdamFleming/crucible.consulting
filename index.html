@@ -294,7 +294,61 @@
   </section>
 
   <!-- CTA -->
-  <section class="cta-band">
+  <section class="cta-band cta-band--forged">
+    <!-- The cooling crust. Home page only: this is the one section on the
+         site that carries an image rather than atmosphere. Styles in
+         section 13 of css/styles.css. -->
+    <div class="crust" aria-hidden="true">
+      <svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" focusable="false">
+        <defs>
+          <linearGradient id="crust-flow" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0"    stop-color="#8E1B06"/>
+            <stop offset="0.38" stop-color="#E04E1B"/>
+            <stop offset="0.72" stop-color="#FF7A2F"/>
+            <stop offset="1"    stop-color="#FBBF77"/>
+          </linearGradient>
+          <!-- Fades the veins out towards the top. The stops are Graphite 2
+               because that is the CTA band's own background. -->
+          <linearGradient id="crust-fade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0"    stop-color="#16171A" stop-opacity="1"/>
+            <stop offset="0.5"  stop-color="#16171A" stop-opacity="0.97"/>
+            <stop offset="0.78" stop-color="#16171A" stop-opacity="0.72"/>
+            <stop offset="1"    stop-color="#16171A" stop-opacity="0.2"/>
+          </linearGradient>
+          <!-- Ridge noise: the table 0 1 0 turns the midpoint of the
+               turbulence into a bright line, which reads as a crack. The
+               gamma pass thins the cracks down to veins. -->
+          <filter id="crust-veins" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.005 0.017" numOctaves="3" seed="17" result="n"/>
+            <feColorMatrix in="n" type="matrix" values="0.34 0.34 0.34 0 0
+                                                        0.34 0.34 0.34 0 0
+                                                        0.34 0.34 0.34 0 0
+                                                        0    0    0    0 1"/>
+            <feComponentTransfer>
+              <feFuncR type="table" tableValues="0 1 0"/>
+              <feFuncG type="table" tableValues="0 1 0"/>
+              <feFuncB type="table" tableValues="0 1 0"/>
+            </feComponentTransfer>
+            <feComponentTransfer>
+              <feFuncR type="gamma" amplitude="1" exponent="7" offset="0"/>
+              <feFuncG type="gamma" amplitude="1" exponent="7" offset="0"/>
+              <feFuncB type="gamma" amplitude="1" exponent="7" offset="0"/>
+            </feComponentTransfer>
+          </filter>
+          <mask id="crust-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="1200" height="420">
+            <rect width="1200" height="420" filter="url(#crust-veins)"/>
+          </mask>
+        </defs>
+        <g class="crust__breathe">
+          <g mask="url(#crust-mask)">
+            <g class="crust__drift">
+              <rect x="-600" y="0" width="2400" height="420" fill="url(#crust-flow)"/>
+            </g>
+          </g>
+        </g>
+        <rect width="1200" height="420" fill="url(#crust-fade)"/>
+      </svg>
+    </div>
     <div class="container section--tight">
       <div class="cta-band__inner reveal">
         <div>
