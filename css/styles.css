@@ -10,7 +10,7 @@
    05  Header and navigation
    06  Buttons and links
    07  Eyebrows, rules, annotation
-   08  Hero and the vessel
+   08  Hero and the figure
    09  Cards and grids
    10  Lists, credibility, steps
    11  FAQ
@@ -238,6 +238,14 @@ strong { color: var(--cast); font-weight: 600; }
   min-height: var(--header-h);
 }
 
+/* The mark — aperture C.
+   One circle, radius 32, stroke 15, in a 100 unit box. The 80 degree mouth
+   is divided into three equal parts of 26.667 degrees: void, molten, void.
+   Never rotate, stretch, recolour the C, or add glow, bevel or gradient. */
+.mark__c   { stroke: currentColor; }
+.mark__arc { fill: var(--molten); }
+.mark--mono .mark__arc { fill: currentColor; }
+
 /* Wordmark */
 .wordmark {
   display: inline-flex;
@@ -447,7 +455,7 @@ strong { color: var(--cast); font-weight: 600; }
   text-transform: uppercase;
 }
 
-/* 08 — Hero and the vessel ---------------------------------- */
+/* 08 — Hero and the figure ---------------------------------- */
 .hero { position: relative; padding-block: clamp(3.5rem, 7vw, 7rem) clamp(4rem, 8vw, 8rem); overflow: hidden; }
 .hero__grid {
   display: grid;
@@ -477,9 +485,37 @@ strong { color: var(--cast); font-weight: 600; }
 .hero__meta span { font-family: var(--font-mono); font-size: 0.8125rem; letter-spacing: 0.06em; color: var(--ash); }
 .hero__meta span b { color: var(--cast); font-weight: 500; }
 
-/* Vessel */
-.vessel { width: 100%; max-width: 460px; margin-inline: auto; }
-.vessel__svg { width: 100%; height: auto; overflow: visible; }
+/* The mark at figure scale, drawn on its own construction grid.
+   Same geometry as the wordmark mark, nothing added but the guides. */
+.mark--construct {
+  display: block;
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  margin-inline: auto;
+  overflow: visible;
+}
+.mark__guide {
+  stroke: var(--steel);
+  stroke-width: 1;
+  fill: none;
+  opacity: 0.34;
+}
+.mark__guide--circle { opacity: 0.5; stroke-dasharray: 3 5; }
+.mark__guide--arc    { opacity: 0.4; stroke-dasharray: 2 6; }
+.mark__guide--mouth  { opacity: 0.42; }
+
+.mark__label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  fill: var(--steel);
+}
+
+/* Cooled: the mono colourway, no molten */
+.mark--cold .mark__c   { stroke: var(--steel); }
+.mark--cold .mark__arc { fill: var(--steel); }
+
 .hero__coords {
   position: absolute;
   right: var(--container-pad);
@@ -488,21 +524,19 @@ strong { color: var(--cast); font-weight: 600; }
   pointer-events: none;
 }
 
-/* The breathing glow */
-.vessel__glow { transform-origin: 200px 168px; animation: breathe 6s var(--ease) infinite; }
-@keyframes breathe {
-  0%, 100% { opacity: 0.82; transform: scale(1); }
-  50%      { opacity: 1;    transform: scale(1.045); }
+/* The figure draws itself once, then holds still.
+   Construction lines first, then the C, then the molten wedge. */
+.js-enabled .mark--construct .mark__guides { opacity: 0; animation: guides-in 900ms var(--ease-out) 300ms forwards; }
+.js-enabled .mark--construct .mark__c {
+  stroke-dasharray: 376;
+  stroke-dashoffset: 376;
+  animation: c-draw 1100ms var(--ease-out) 460ms forwards;
 }
-.spark { opacity: 0; animation: spark-rise 5.5s linear infinite; }
-.spark--2 { animation-delay: 1.8s; }
-.spark--3 { animation-delay: 3.4s; }
-@keyframes spark-rise {
-  0%   { opacity: 0; transform: translateY(0); }
-  12%  { opacity: 0.9; }
-  60%  { opacity: 0; transform: translateY(-46px); }
-  100% { opacity: 0; transform: translateY(-46px); }
-}
+.js-enabled .mark--construct .mark__arc { opacity: 0; animation: arc-in 500ms var(--ease-out) 1320ms forwards; }
+.js-enabled .mark--construct .mark__labels { opacity: 0; animation: guides-in 700ms var(--ease-out) 1420ms forwards; }
+@keyframes guides-in { to { opacity: 1; } }
+@keyframes c-draw   { to { stroke-dashoffset: 0; } }
+@keyframes arc-in   { to { opacity: 1; } }
 
 /* 09 — Cards and grids -------------------------------------- */
 .card {
@@ -853,9 +887,9 @@ strong { color: var(--cast); font-weight: 600; }
 .js-enabled .hero__animate.d2 { animation-delay: 240ms; }
 .js-enabled .hero__animate.d3 { animation-delay: 340ms; }
 .js-enabled .hero__animate.d4 { animation-delay: 440ms; }
-.js-enabled .hero__vessel-wrap { opacity: 0; animation: vessel-in 700ms var(--ease-out) 200ms forwards; }
+.js-enabled .hero__figure-wrap { opacity: 0; animation: figure-in 700ms var(--ease-out) 200ms forwards; }
 @keyframes hero-in { to { opacity: 1; transform: none; } }
-@keyframes vessel-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
+@keyframes figure-in { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: none; } }
 
 /* 15 — Reduced motion and print ----------------------------- */
 @media (prefers-reduced-motion: reduce) {
@@ -868,9 +902,11 @@ strong { color: var(--cast); font-weight: 600; }
   }
   .js-enabled .reveal { opacity: 1; transform: none; }
   .js-enabled .hero__animate,
-  .js-enabled .hero__vessel-wrap { opacity: 1; transform: none; animation: none; }
-  .vessel__glow { animation: none; }
-  .spark { display: none; }
+  .js-enabled .hero__figure-wrap,
+  .js-enabled .mark--construct .mark__guides,
+  .js-enabled .mark--construct .mark__arc,
+  .js-enabled .mark--construct .mark__labels { opacity: 1; transform: none; animation: none; }
+  .js-enabled .mark--construct .mark__c { stroke-dasharray: none; stroke-dashoffset: 0; animation: none; }
 }
 
 /* ============================================================
@@ -885,8 +921,8 @@ strong { color: var(--cast); font-weight: 600; }
 @media (max-width: 860px) {
   .hero__grid { grid-template-columns: 1fr; }
   .hero__content { max-width: 100%; order: 2; }
-  .hero__vessel-wrap { order: 1; }
-  .vessel { max-width: 320px; }
+  .hero__figure-wrap { order: 1; }
+  .mark--construct { max-width: 300px; }
   .hero__coords { display: none; }
   .contact-grid { grid-template-columns: 1fr; }
   .cta-band__inner { grid-template-columns: 1fr; align-items: start; }
