@@ -212,8 +212,16 @@ crucible.consulting/
 │   ├── favicon-32x32.png
 │   ├── apple-touch-icon.png
 │   ├── og-image.png        The preview image shown when the link is shared
+│   ├── brand/              The approved logo files (see assets/brand/README.md)
+│   │   ├── crucible-mark-primary-on-dark.svg
+│   │   ├── crucible-mark-primary-on-light.svg
+│   │   ├── crucible-mark-mono-cast.svg
+│   │   ├── crucible-mark-mono-forge.svg
+│   │   ├── crucible-favicon.svg
+│   │   ├── crucible-lockup-horizontal-on-dark.svg
+│   │   └── crucible-lockup-stacked-on-dark.svg
 │   └── img/
-│       ├── mark.svg
+│       ├── mark.svg        A copy of the primary mark
 │       ├── icon-192.png
 │       └── icon-512.png
 ├── CNAME                   Your domain name (do not delete; GitHub needs it)
