@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="Crucible Consulting">
+<!-- Crucible Consulting. Aperture C: single circle, radius 32, stroke 15, in a 100 unit box.
+     80 degree mouth on the right, divided into three equal 26.667 degree parts: void, molten, void.
+     Do not rotate, stretch, recolour the C, or add glow, bevel, shadow or gradient. -->
+  <rect width="100" height="100" rx="22" fill="#0D0D0F"/>
+  <g transform="translate(50 50) scale(1.12) translate(-50 -50)">
+  <path d="M 74.513 70.569 A 32 32 0 1 1 74.513 29.431" fill="none" stroke="#F5F2EC" stroke-width="15"/>
+  <path d="M 73.84 44.35 L 88.435 40.891 A 39.5 39.5 0 0 1 88.435 59.109 L 73.84 55.65 A 24.5 24.5 0 0 0 73.84 44.35 Z" fill="#E04E1B"/>
+  </g>
+</svg>
